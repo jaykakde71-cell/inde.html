@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Afifa</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .rain-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            transition: opacity 1s;
+        }
+        .rain-text {
+            position: absolute;
+            font-size: 1.2rem;
+            color: #ff69b4; /* Pink color */
+            opacity: 0;
+            animation: textRain linear infinite;
+        }
+        @keyframes textRain {
+            0% { transform: translateY(-100px); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        .countdown {
+            font-size: 8rem;
+            color: #ff69b4;
+            opacity: 0;
+            animation: showUp 1s forwards;
+            animation-delay: var(--delay);
+            z-index: 2;
+        }
+        .final-message {
+            font-size: 5rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            position: relative;
+            z-index: 3;
+        }
+        .message-word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: popIn 0.5s ease-out forwards;
+            animation-delay: var(--delay);
+            color: #ff69b4;
+            margin: 0 10px;
+        }
+        @keyframes showUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 2s linear infinite;
+        }
+        .heart {
+            position: absolute;
+            background-color: #ff69b4;
+            transform: rotate(-45deg);
+            opacity: 0;
+            animation: floatAndFade 5s linear infinite;
+        }
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ff69b4;
+            border-radius: 50%;
+        }
+        .heart::before { top: -50%; }
+        .heart::after { left: 50%; }
+        @keyframes twinkle {
+            0%, 100% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes floatAndFade {
+            0% { transform: translateY(0) rotate(-45deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(-45deg); opacity: 0; }
+        }
+        .media-container {
+            display: none;
+            position: relative;
+            width: 90vw;
+            height: 90vh;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        .media-container img, .media-container video {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 10px;
+            margin: 10px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        .center-video {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 50%;
+            z-index: 5;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .gift-box {
+            display: none;
+            width: 200px;
+            height: 150px;
+            background: #ffb6c1;
+            border-radius: 15px;
+            position: relative;
+            margin: 40px auto;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s;
+            z-index: 10;
+        }
+        .gift-box:hover { transform: scale(1.05); }
+        .lid {
+            width: 220px;
+            height: 30px;
+            background: #ff1493;
+            position: absolute;
+            top: -15px;
+            left: -10px;
+            border-radius: 5px;
+            transform-origin: bottom;
+            transform: rotateX(0deg);
+            transition: transform 1s ease-in-out;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        .gift-box.open .lid { transform: rotateX(70deg); }
+        .ribbon {
+            width: 30px;
+            height: 100%;
+            background: #ff1493;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .bow {
+            width: 80px;
+            height: 40px;
+            background: #ff1493;
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50% 50% 0 0;
+        }
+        .gift-message {
+            display: none;
+            text-align: center;
+            z-index: 11;
+        }
+    </style>
+</head>
+<body>
+    <div class="rain-container" id="rainContainer"></div>
+    <div class="countdown" id="countdown"></div>
+    <div class="final-message" id="finalMessage"></div>
+    <div class="media-container" id="mediaContainer">
+    </div>
+    <div class="gift-box" id="giftBox" onclick="openGift()">
+        <div class="lid"></div>
+        <div class="ribbon"></div>
+        <div class="bow"></div>
+    </div>
+    <div class="gift-message" id="giftMessage">
+        <h1>Happy Birthday Afifa!❤</h1>
+        <p>I hope your special day is filled with love, joy, and laughter.</p>
+    </div>
+
+    <audio id="birthdayMusic" src="happy-birthday-to-you-370804.mp3" preload="auto"></audio>
+
+    <script>
+        const rainContainer = document.getElementById('rainContainer');
+        const countdownElement = document.getElementById('countdown');
+        const finalMessageElement = document.getElementById('finalMessage');
+        const mediaContainer = document.getElementById('mediaContainer');
+        const giftBox = document.getElementById('giftBox');
+        const giftMessage = document.getElementById('giftMessage');
+        const birthdayMusic = document.getElementById('birthdayMusic'); // GET THE AUDIO ELEMENT
+
+        const rainText = 'Happy Birthday Afifa';
+        const rainCharacters = rainText.split('');
+
+        const photoUrls = [
+            'C:/Users/Jay/Documents/Screenshot_20250819-135317.jpg',
+            'C:/Users/Jay/Documents/3a17e84a0551140ea1c4742b93c00998.jpg',
+            'C:/Users/Jay/Documents/IMG-20221023-WA0019.jpg',
+            'C:/Users/Jay/Documents/WhatsApp01.jpg',
+            'C:/Users/Jay/Documents/WhatsApp02.jpg',
+        ];
+        const videoUrl = 'C:/Users/Jay/Documents/VID-20250817-WA0002.mp4';
+
+        function createRaindrop() {
+            const raindrop = document.createElement('span');
+            raindrop.classList.add('rain-text');
+            raindrop.textContent = rainCharacters[Math.floor(Math.random() * rainCharacters.length)];
+            
+            raindrop.style.left = Math.random() * 100 + 'vw';
+            raindrop.style.animationDuration = Math.random() * 3 + 2 + 's';
+            raindrop.style.fontSize = Math.random() * 0.8 + 0.7 + 'rem';
+            
+            rainContainer.appendChild(raindrop);
+            
+            setTimeout(() => raindrop.remove(), 5000);
+        }
+
+        const rainInterval = setInterval(createRaindrop, 100);
+
+        function createStarsAndHearts() {
+            for (let i = 0; i < 20; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(star);
+            }
+            for (let i = 0; i < 10; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.width = heart.style.height = Math.random() * 10 + 5 + 'px';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 5 + 5 + 's';
+                document.body.appendChild(heart);
+            }
+        }
+
+        function startCountdown() {
+            let count = 3;
+            countdownElement.textContent = count;
+            countdownElement.style.opacity = '1';
+            
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownElement.textContent = count;
+                } else if (count === 0) {
+                    countdownElement.textContent = '1';
+                } else {
+                    clearInterval(countdownInterval);
+                    clearInterval(rainInterval);
+                    rainContainer.style.opacity = '0';
+                    countdownElement.style.display = 'none';
+                    showFinalMessage();
+                }
+            }, 1000);
+        }
+
+        function showFinalMessage() {
+            finalMessageElement.innerHTML = 'Happy Birthday Afifa'.split(' ').map((word, index) => {
+                return `<span class="message-word" style="--delay: ${index * 0.5}s;">${word}</span>`;
+            }).join(' ');
+            
+            finalMessageElement.style.opacity = '1';
+            createStarsAndHearts();
+            birthdayMusic.play(); // PLAY THE MUSIC HERE
+            setTimeout(showMedia, 2500);
+        }
+
+        function showMedia() {
+            finalMessageElement.style.display = 'none';
+            mediaContainer.style.display = 'flex';
+            
+            // Add VIDEO
+            const centerVideo = document.createElement('video');
+            centerVideo.src = videoUrl;
+            centerVideo.classList.add('center-video');
+            centerVideo.autoplay = true;
+            centerVideo.loop = true;
+            centerVideo.muted = true;
+            centerVideo.style.animationDelay = '0s';
+            mediaContainer.appendChild(centerVideo);
+
+            // Add photos
+            photoUrls.forEach((url, index) => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.style.animationDelay = `${1 + index * 0.3}s`;
+                mediaContainer.appendChild(img);
+            });
+
+            // Show gift box after photos appear
+            setTimeout(() => {
+                mediaContainer.style.justifyContent = 'space-around';
+                giftBox.style.display = 'block';
+                const photos = mediaContainer.querySelectorAll('img, video');
+                photos.forEach(media => media.style.opacity = '1');
+            }, 1000 + photoUrls.length * 300);
+        }
+
+        function openGift() {
+            mediaContainer.style.display = 'none';
+            giftBox.style.display = 'none';
+            giftMessage.style.display = 'block';
+            // Music is already playing, so no need to call play() here.
+        }
+
+        setTimeout(startCountdown, 2000);
+    </script>
+</body>
+</html>
